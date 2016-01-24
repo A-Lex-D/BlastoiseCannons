@@ -9,29 +9,9 @@
 Servo left;
 Servo right;
 
-int leftPos = 180;
-int rightPos = 0;
-
-void openWings() {
-  while (leftPos != 45 && rightPos != 135)
-  {
-    leftPos-1;
-    rightPos+1;
-    left.write(leftPos);
-    right.write(rightPos);
-    delay(5);
-  }
-}
-void closeWings() {
-  while (leftPos != 180 && rightPos != 0)
-  {
-    leftPos+1;
-    rightPos-1;
-    left.write(leftPos);
-    right.write(rightPos);
-    delay(5);
-  }
-}
+int rightPos = 179;
+int leftPos = 0;
+int i;
 
 void setup() {
 
@@ -43,8 +23,8 @@ void setup() {
   pinMode(BUTTON, INPUT);
 
   //Begin servos at center
-  left.write(180);
-  right.write(0);
+  left.write(leftPos);
+  right.write(rightPos);
   
 }
 
@@ -55,19 +35,34 @@ void loop() {
   //Set button value
   inVal=digitalRead(BUTTON);
 
-  //Check if up button is pressed
+  //Check if button is pressed
   if (inVal==LOW)
   {
-    if (leftPos==180 && rightPos==0)
+    if (leftPos==0 && rightPos==179)
     {
-      openWings();
+      for(i=0; i<=135; i++)
+      {
+        left.write(i);
+        right.write(179-i);
+        delay(10);
+      }
+
+      leftPos=135;
+      rightPos=45;
     }
-    else if (leftPos==45 && rightPos==135)
+    else if (leftPos==135 && rightPos==45)
     {
-      closeWings();
+      for(i=135; i>=0; i--)
+      {
+        left.write(i);
+        right.write(179-i);
+        delay(10);
+      }
+      leftPos=0;
+      rightPos=179;
     }
-   }
-  }
+ }
+}
   
 
   
